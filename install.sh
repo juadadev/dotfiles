@@ -18,7 +18,7 @@ create_link() {
   echo "✅ $name configurado"
 }
 
-create_link ~/.dotfiles/nvim ~/.config/nvim "Neovim"
+create_link ~/dotfiles/nvim ~/.config/nvim "Neovim"
 
 echo ""
 echo "✨ ¡Dotfiles instalados correctamente!"
