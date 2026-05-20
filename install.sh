@@ -1,11 +1,24 @@
-# Crear script install.sh
-cat > install.sh << 'EOF'
 #!/bin/bash
 
-# Crear enlace para Neovim
-ln -sf ~/.dotfiles/nvim ~/.config/nvim
+echo "📦 Instalando dotfiles..."
 
-echo "¡Dotfiles instalados!"
-EOF
+mkdir -p ~/.config
 
-chmod +x install.sh
+create_link() {
+  local source="$1"
+  local target="$2"
+  local name="$3"
+
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    echo "⚠️  $target ya existe, creando backup..."
+    mv "$target" "$target.backup.$(date +%Y%m%d_%H%M%S)"
+  fi
+
+  ln -sf "$source" "$target"
+  echo "✅ $name configurado"
+}
+
+create_link ~/.dotfiles/nvim ~/.config/nvim "Neovim"
+
+echo ""
+echo "✨ ¡Dotfiles instalados correctamente!"
