@@ -9,13 +9,15 @@ create_link() {
   local target="$2"
   local name="$3"
 
+  # Eliminar si existe (ya sea archivo, directorio o enlace)
   if [ -e "$target" ] || [ -L "$target" ]; then
-    echo "⚠️  $target ya existe, creando backup..."
-    mv "$target" "$target.backup.$(date +%Y%m%d_%H%M%S)"
+    echo "🗑️  Eliminando $target existente..."
+    rm -rf "$target"
   fi
 
+  # Crear el enlace simbólico
   ln -sf "$source" "$target"
-  echo "✅ $name configurado"
+  echo "✅ $name configurado (enlace creado)"
 }
 
 create_link ~/dotfiles/nvim ~/.config/nvim "Neovim"
