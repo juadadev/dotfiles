@@ -4,6 +4,14 @@ echo "📦 Instalando dotfiles..."
 
 mkdir -p ~/.config
 
+# Instalar lazygit si no existe
+if ! command -v lazygit &>/dev/null; then
+  echo "📥 Instalando lazygit con pacman..."
+  sudo pacman -S lazygit --noconfirm
+else
+  echo "✅ lazygit ya está instalado"
+fi
+
 create_link() {
   local source="$1"
   local target="$2"
