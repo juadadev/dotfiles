@@ -8,8 +8,8 @@ echo "📦 Installing dotfiles with GNU Stow..."
 # 1. Ensure base directories exist
 mkdir -p ~/.config
 
-# 2. Install system dependencies if they are missing (lazygit and stow)
-for pkg in lazygit stow; do
+# 2. Install system dependencies if they are missing
+for pkg in lazygit neovim stow; do
   if ! command -v "$pkg" &>/dev/null; then
     echo "📥 Installing $pkg via pacman..."
     sudo pacman -S "$pkg" --noconfirm
