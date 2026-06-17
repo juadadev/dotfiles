@@ -12,9 +12,9 @@ mkdir -p ~/.config
 echo "🔍 Checking system dependencies..."
 
 # Binary names to check in the system
-commands=(lazygit stow nvim node)
+commands=(lazygit stow nvim node npm)
 # Corresponding pacman package names in Arch/CachyOS
-packages=(lazygit stow neovim nodejs)
+packages=(lazygit stow neovim nodejs npm)
 
 for i in "${!commands[@]}"; do
   cmd="${commands[$i]}"
