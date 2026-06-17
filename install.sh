@@ -9,12 +9,22 @@ echo "📦 Installing dotfiles with GNU Stow..."
 mkdir -p ~/.config
 
 # 2. Install system dependencies if they are missing
-for pkg in lazygit stow neovim nodejs; do
-  if ! command -v "$pkg" &>/dev/null; then
+echo "🔍 Checking system dependencies..."
+
+# Binary names to check in the system
+commands=(lazygit stow nvim node)
+# Corresponding pacman package names in Arch/CachyOS
+packages=(lazygit stow neovim nodejs)
+
+for i in "${!commands[@]}"; do
+  cmd="${commands[$i]}"
+  pkg="${packages[$i]}"
+
+  if ! command -v "$cmd" &>/dev/null; then
     echo "📥 Installing $pkg via pacman..."
     sudo pacman -S "$pkg" --noconfirm
   else
-    echo "✅ $pkg is already installed"
+    echo "✅ $cmd is already installed"
   fi
 done
 
@@ -28,7 +38,7 @@ stow nvim
 echo "✅ Neovim (LazyVim) configured with Stow"
 
 # =========================================================
-# 🚀 JavaScript/TypeScript Runtime & Tools
+# 🚀 TypeScript Runtime & Tools
 # =========================================================
 echo ""
 echo "⚡ Configuring JavaScript/TypeScript environments..."
