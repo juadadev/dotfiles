@@ -1,34 +1,31 @@
 #!/bin/bash
 
-echo "📦 Instalando dotfiles..."
+# Exit immediately if a command exits with a non-zero status
+set -e
 
+echo "📦 Installing dotfiles with GNU Stow..."
+
+# 1. Ensure base directories exist
 mkdir -p ~/.config
 
-# Instalar lazygit si no existe
-if ! command -v lazygit &>/dev/null; then
-  echo "📥 Instalando lazygit con pacman..."
-  sudo pacman -S lazygit --noconfirm
-else
-  echo "✅ lazygit ya está instalado"
-fi
-
-create_link() {
-  local source="$1"
-  local target="$2"
-  local name="$3"
-
-  # Eliminar si existe (ya sea archivo, directorio o enlace)
-  if [ -e "$target" ] || [ -L "$target" ]; then
-    echo "🗑️  Eliminando $target existente..."
-    rm -rf "$target"
+# 2. Install system dependencies if they are missing (lazygit and stow)
+for pkg in lazygit stow; do
+  if ! command -v "$pkg" &>/dev/null; then
+    echo "📥 Installing $pkg via pacman..."
+    sudo pacman -S "$pkg" --noconfirm
+  else
+    echo "✅ $pkg is already installed"
   fi
+done
 
-  # Crear el enlace simbólico
-  ln -sf "$source" "$target"
-  echo "✅ $name configurado (enlace creado)"
-}
+# 3. Apply configurations using Stow
+echo "🔗 Creating symlinks with Stow..."
+cd ~/dotfiles
 
-create_link ~/dotfiles/nvim ~/.config/nvim "Neovim"
+# Stow safely manages the Neovim symlink handling
+stow nvim
+
+echo "✅ Neovim (LazyVim) configured with Stow"
 
 echo ""
-echo "✨ ¡Dotfiles instalados correctamente!"
+echo "✨ Dotfiles installed successfully!"
