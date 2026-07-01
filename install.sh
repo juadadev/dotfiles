@@ -12,9 +12,9 @@ mkdir -p ~/.config
 echo "🔍 Checking system dependencies..."
 
 # Binary names to check in the system
-commands=(lazygit stow nvim node npm)
+commands=(lazygit stow nvim node npm tmux)
 # Corresponding pacman package names in Arch/CachyOS
-packages=(lazygit stow neovim nodejs npm)
+packages=(lazygit stow neovim nodejs npm tmux)
 
 for i in "${!commands[@]}"; do
   cmd="${commands[$i]}"
@@ -32,10 +32,11 @@ done
 echo "🔗 Creating symlinks with Stow..."
 cd ~/dotfiles
 
-# Stow safely manages the Neovim symlink handling
+# Stow safely manages the Neovim and TMUX symlink handling
 stow nvim
+stow tmux
 
-echo "✅ Neovim (LazyVim) configured with Stow"
+echo "✅ Neovim (LazyVim) and tmux configured with Stow"
 
 # =========================================================
 # 🚀 TypeScript Runtime & Tools
@@ -61,6 +62,29 @@ if ! command -v bun &>/dev/null; then
 else
   echo "✅ Bun is already installed"
 fi
+
+# =========================================================
+# 🖥️ Tmux Plugin Manager (TPM) & Plugin Automation
+# =========================================================
+echo ""
+echo "🔌 Configuring Tmux Plugin Manager..."
+
+# 6. Clone TPM if it doesn't exist
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+  echo "📥 Cloning Tmux Plugin Manager (tpm)..."
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+else
+  echo "✅ TPM is already installed"
+fi
+
+# 7. Auto-install tmux plugins natively without opening tmux manually
+echo "📥 Installing tmux plugins..."
+# Creates a temporary tmux server in the background to force tpm to install plugins
+tmux start-server
+tmux new-session -d
+~/.tmux/plugins/tpm/bin/install_plugins
+tmux kill-server
+echo "✅ Tmux plugins installed successfully"
 
 echo ""
 echo "✨ Dotfiles and development tools installed successfully!"
